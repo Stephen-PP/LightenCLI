@@ -2,6 +2,7 @@ package functions
 
 import (
 	"fmt"
+	"os"
 	"os/exec"
 	"strconv"
 	"strings"
@@ -24,6 +25,11 @@ type LossyPngOptions struct {
 
 // Function to perform lossless PNG compression
 func CompressPNGLossless(inputFilename string, options LosslessPngOptions) error {
+	// Verify input filename file exists
+	if _, err := os.Stat(inputFilename); os.IsNotExist(err) {
+		return fmt.Errorf("input file does not exist")
+	}
+
 	// Verify output file name
 	if options.OutputFilename == "" {
 		return fmt.Errorf("invalid output filename")
@@ -63,6 +69,11 @@ func CompressPNGLossless(inputFilename string, options LosslessPngOptions) error
 
 // Function to perform lossy PNG compression
 func CompressPNGLossy(inputFilename string, options LossyPngOptions) error {
+	// Verify input filename file exists
+	if _, err := os.Stat(inputFilename); os.IsNotExist(err) {
+		return fmt.Errorf("input file does not exist")
+	}
+
 	// Verify quality string is valid (e.g., "60-80")
 	qualityParts := strings.Split(options.Quality, "-")
 	if len(qualityParts) != 2 {

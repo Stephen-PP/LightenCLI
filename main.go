@@ -20,4 +20,18 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	// JPEG
+	jpegOpts := functions.JpegOptions{Quality: 80, OutputFilename: "./test_files/outputs/compressed_jpeg.jpg"}
+	err = functions.CompressJPEG("./test_files/image.jpg", jpegOpts)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	// PDF
+	pdfOpts := functions.PdfOptions{Quality: 75, OutputFilename: "./test_files/outputs/compressed_pdf.pdf"}
+	err = functions.CompressPDF("./test_files/document.pdf", pdfOpts)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
