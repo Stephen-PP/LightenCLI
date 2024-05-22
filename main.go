@@ -1,14 +1,23 @@
 package main
 
 import (
+	"fmt"
+
 	functions "github.com/Stephen-PP/LightenCLI/functions"
 )
 
 func main() {
-	losslessOpts := functions.LosslessPngOptions{Level: 7, Strip: true, Interlace: true, OutputFilename: "./test_files/outputs/output-lossless.png"}
-	_ = functions.CompressPNGLossless("./test_files/image.png", losslessOpts)
+	// Lossless
+	losslessOpts := functions.LosslessPngOptions{Level: 6, Strip: true, OutputFilename: "./test_files/outputs/image-lossless.png"}
+	err := functions.CompressPNGLossless("./test_files/image.png", losslessOpts)
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	// Lossy
-	lossyOpts := functions.LossyPngOptions{Quality: "65-80", Speed: 5, OutputFilename: "./test_files/outputs/output-lossy.png"}
-	_ = functions.CompressPNGLossy("./test_files/image.png", lossyOpts)
+	lossyOpts := functions.LossyPngOptions{Quality: "65-80", Speed: 5, OutputFilename: "./test_files/outputs/image-lossy.png"}
+	err = functions.CompressPNGLossy("./test_files/image.png", lossyOpts)
+	if err != nil {
+		fmt.Println(err)
+	}
 }

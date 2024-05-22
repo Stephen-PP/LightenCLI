@@ -32,8 +32,13 @@ func CompressPNGLossless(inputFilename string, options LosslessPngOptions) error
 	// Create command arguments array
 	args := []string{inputFilename}
 
+	// Handle default optimization level
+	if options.Level == 0 {
+		options.Level = 1
+	}
+
 	// Handle optimization level
-	if options.Level < 0 || options.Level > 7 {
+	if options.Level < 1 || options.Level > 7 {
 		return fmt.Errorf("invalid optimization level (0-7)")
 	}
 	args = append(args, fmt.Sprintf("-o%d", options.Level))
@@ -49,9 +54,7 @@ func CompressPNGLossless(inputFilename string, options LosslessPngOptions) error
 	}
 
 	// Handle output filename
-	if options.OutputFilename != "" {
-		args = append(args, "-out", options.OutputFilename)
-	}
+	args = append(args, "-out", options.OutputFilename)
 
 	cmd := exec.Command("optipng", args...) // Run OptiPNG
 	err := cmd.Run()
