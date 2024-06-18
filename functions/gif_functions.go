@@ -60,7 +60,6 @@ func CompressGIFLossy(inputFilename string, options LossyGifOptions) error {
 
 	// Execute command
 	cmd := exec.Command("gifsicle", fmt.Sprintf("--lossy=%d", options.Quality), inputFilename, "-o", options.OutputFilename)
-	fmt.Println(cmd.String())
 	err := cmd.Run()
 	return err
 }
