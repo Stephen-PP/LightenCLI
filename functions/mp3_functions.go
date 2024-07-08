@@ -23,24 +23,22 @@ func CompressMP3(inputFilename string, options MP3Options) error {
 
 	// Output File Validation
 	if options.OutputFilename == "" {
-		// Default output filename if not provided (e.g., add ".mp3" to input)
-		options.OutputFilename = inputFilename + ".mp3"
-	}
-
-	// Bitrate Validation
-	if options.Bitrate != 8 && options.Bitrate != 16 && options.Bitrate != 24 &&
-		options.Bitrate != 32 && options.Bitrate != 40 && options.Bitrate != 48 &&
-		options.Bitrate != 56 && options.Bitrate != 64 && options.Bitrate != 80 &&
-		options.Bitrate != 96 && options.Bitrate != 112 && options.Bitrate != 128 &&
-		options.Bitrate != 160 && options.Bitrate != 192 && options.Bitrate != 224 &&
-		options.Bitrate != 256 && options.Bitrate != 320 {
-		return fmt.Errorf("invalid bitrate (valid options: 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320)")
+		return fmt.Errorf("invalid output filename")
 	}
 
 	// Base Command Construction
 	cmdArgs := []string{
-		"-b", fmt.Sprintf("%d", options.Bitrate), // Set bitrate
 		inputFilename, options.OutputFilename, // Input and output files
+	}
+
+	// Bitrate Validation
+	if !(options.Bitrate != 8 && options.Bitrate != 16 && options.Bitrate != 24 &&
+		options.Bitrate != 32 && options.Bitrate != 40 && options.Bitrate != 48 &&
+		options.Bitrate != 56 && options.Bitrate != 64 && options.Bitrate != 80 &&
+		options.Bitrate != 96 && options.Bitrate != 112 && options.Bitrate != 128 &&
+		options.Bitrate != 160 && options.Bitrate != 192 && options.Bitrate != 224 &&
+		options.Bitrate != 256 && options.Bitrate != 320 && options.DesiredBitrate == 0) {
+		cmdArgs = append(cmdArgs, "-b", fmt.Sprintf("%d", options.Bitrate)) // Set bitrate
 	}
 
 	// Optional Settings
@@ -50,6 +48,10 @@ func CompressMP3(inputFilename string, options MP3Options) error {
 		cmdArgs = append(cmdArgs, "--abr", fmt.Sprintf("%d", options.DesiredBitrate))
 	} else if options.Quality != 0 && options.Quality <= 9 { // If quality is specified
 		cmdArgs = append(cmdArgs, "-V", fmt.Sprintf("%d", options.Quality))
+	}
+
+	if len(cmdArgs) == 2 { // If no bitrate or quality is specified
+		return fmt.Errorf("no valid bitrate or quality specified")
 	}
 
 	// Compression Execution

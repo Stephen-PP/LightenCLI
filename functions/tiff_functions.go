@@ -54,7 +54,7 @@ func CompressTIFFLossy(inputFilename string, options LossyTiffOptions) error {
 	}
 
 	// Validate input options
-	if options.OutputFilename == "" || (options.Quality < 0 && options.Quality > 100) {
+	if options.OutputFilename == "" || (options.Quality < 0 || options.Quality > 100) {
 		return fmt.Errorf("invalid options")
 	}
 
